@@ -90,12 +90,19 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AlgorithmBase.cu" />
     <ClCompile Include="main.cpp" />
+    <CudaCompile Include="Negate.cu">
+      <FileType>Document</FileType>
+    </CudaCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AlgorithmBase.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="Negate.h" />
     <ClInclude Include="ProcessChain.h" />
     <ClInclude Include="kernel.h" />
+    <ClInclude Include="RawImageData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

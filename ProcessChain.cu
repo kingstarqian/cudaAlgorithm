@@ -4,12 +4,13 @@
 #include <stdio.h>
 #include <iostream>
 #include "Common.h"
+#include "Negate.h"
+#include "RawImageData.h"
 
 using namespace std;
 
-ProcessChain::ProcessChain(): deviceBuffer(NULL)
+ProcessChain::ProcessChain(): deviceBuffer(NULL),negate(NULL)
 {
-
 }
 
 ProcessChain::~ProcessChain()
@@ -21,6 +22,7 @@ bool ProcessChain::initializeCuda()
 	if (initializeDevice())
 	{
 		mallocMemory();
+		initializeChain();
 	}
 	else
 	{
@@ -91,7 +93,19 @@ void ProcessChain::uninitializeCuda()
 	freeMemory();
 }
 
+void ProcessChain::process(RawImageData* image)
+{
+	cudaMemcpy(deviceBuffer, image->getBuffer(), IMAGE_SIZE * sizeof(unsigned short), cudaMemcpyHostToDevice);
+	negate->fire(deviceBuffer);
+	cudaMemcpy(image->getBuffer(), deviceBuffer, IMAGE_SIZE * sizeof(unsigned short), cudaMemcpyDeviceToHost);
+}
+
 void ProcessChain::freeMemory()
 {
 
+}
+
+void ProcessChain::initializeChain()
+{
+	negate = new Negate();
 }
