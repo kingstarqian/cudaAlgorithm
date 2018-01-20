@@ -90,7 +90,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <CudaCompile Include="kernel.cu" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AlgorithmBase.cu" />
+    <CudaCompile Include="AlgorithmBase.cu">
+      <FileType>Document</FileType>
+    </CudaCompile>
     <ClCompile Include="main.cpp" />
     <CudaCompile Include="Negate.cu">
       <FileType>Document</FileType>

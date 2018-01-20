@@ -21,21 +21,16 @@ Negate::~Negate()
 
 void Negate::fire(unsigned short * deviceBuffer)
 {
-	cudaEvent_t start, stop;
-	cudaEventCreate(&start);
-	cudaEventCreate(&stop);
-	cudaEventRecord(start, 0);
+	CALCULATE_CUDA_ELAPSED_START
 
 	for (int i = 0; i < IMAGE_HEIGHT; ++i)
 	{
-		negateAlgorithm << <1, IMAGE_WIDTH >> >(deviceBuffer + IMAGE_WIDTH * i);
+		negateAlgorithm <<<1, IMAGE_WIDTH >>>(deviceBuffer + IMAGE_WIDTH * i);
 	}
 
-	cudaEventRecord(stop, 0);
-	cudaEventSynchronize(stop);
-	float tm;
-	cudaEventElapsedTime(&tm, start, stop);
-	printf("Negate GPU Elapsed time:%.6f ms.\n", tm);
+	dim3 dim(IMAGE_WIDTH, IMAGE_HEIGHT);
+
+	CALCULATE_CUDA_ELAPSED_STOP("Negate")
 	
 	cudaError_t cudaStatus = cudaThreadSynchronize();
 	if (cudaStatus != cudaSuccess)
